@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Register</h1>
+  {% from "includes/_form_helpers.html" import render_field %}
+  <form novalidate action="" method="POST">
+    <div class="form-group">
+      {{render_field(form.name, class="form-control")}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.email, class="form-control")}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.username, class="form-control")}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.password, class="form-control")}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.confirm, class="form-control")}}
+    </div>
+
+    <div class="my-3">
+      <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+  </form>
+{% endblock %}
