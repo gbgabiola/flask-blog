@@ -6,5 +6,9 @@
     <p class="lead">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Soluta officia error placeat inventore dolorem. Sed reprehenderit voluptatem sunt quis praesentium libero impedit repellendus, illo sit tenetur aliquid id quae iusto!
     </p>
+    {% if session.logged_in == NULL %}
+      <a class="btn btn-lg btn-primary" href="/register">Register</a>
+      <a class="btn btn-lg btn-success" href="/login">Login</a>
+    {% endif %}
   </div>
 {% endblock %}
