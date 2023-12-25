@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Edit Article</h1>
+  {% from "includes/_form_helpers.html" import render_field %}
+  <form novalidate action="" method="POST">
+    <div class="form-group">
+      {{render_field(form.title, class="form-control")}}
+    </div>
+    <div class="form-group">
+      {{render_field(form.body, class="form-control", id="editor")}}
+    </div>
+    <div class="my-3">
+      <input type="submit" class="btn btn-primary" value="Submit" />
+    </div>
+  </form>
+{% endblock %}
