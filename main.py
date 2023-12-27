@@ -4,6 +4,9 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from decouple import config
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
@@ -150,9 +153,7 @@ def add_article():
 @app.route("/edit_article/<string:id>", methods=["GET", "POST"])
 @is_logged_in
 def edit_article(id):
-    cur = mysql.connection.cursor()
-    result = cur.execute("SELECT * FROM articles WHERE id = %s", [id])
-    article = cur.fetchone()
+    article = execute_query("SELECT * FROM articles WHERE id = %s", [id], fetch_one=True)
     form = ArticleForm(request.form)
     form.title.data = article["title"]
     form.body.data = article["body"]
@@ -170,12 +171,24 @@ def edit_article(id):
 @app.route("/delete_article/<string:id>", methods=["POST"])
 @is_logged_in
 def delete_article(id):
-    cur = mysql.connection.cursor()
-    cur.execute("DELETE FROM articles WHERE id = %s", [id])
-    mysql.connection.commit()
-    cur.close()
+    execute_query("DELETE FROM articles WHERE id = %s", [id])
     flash("Article Deleted", "success")
     return redirect(url_for("dashboard"))
 
+def analyze_data():
+    data = execute_query("SELECT * FROM articles")
+    if data:
+        df = pd.DataFrame(data)
+        counts = df["author"].value_counts()
+
+        plt.figure(figsize=(8, 6))
+        counts.plot(kind="bar")
+        plt.title("Article Authors")
+        plt.xlabel("Authors")
+        plt.ylabel("Number of Articles")
+        plt.savefig("static/author_counts.png")
+        plt.close()
+
 if __name__ == "__main__":
+    analyze_data()
     app.run(debug=True)
